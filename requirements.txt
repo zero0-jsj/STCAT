@@ -1,0 +1,20 @@
+torchtext==0.11.0
+timm==0.4.12
+tensorboard==2.2.2
+sklearn
+pytorch-pretrained-bert
+transformers==4.5.1
+Pillow
+opencv_python
+ffmpeg_python
+scipy
+cython
+tqdm
+setuptools==65.5.0
+protobuf==4.21.10
+python -m torch.distributed.launch --nproc_per_node=1 scripts/test_net.py --config-file "experiments/VidSTG/e2e_STCAT_R101_VidSTG.yaml" \
+ --use-seed MODEL.WEIGHT /media/ubuntu/2.0TB/vidstg/checkpoints/stcat_res448/vidstg_res448.pth OUTPUT_DIR /media/ubuntu/2.0TB/vidstg/checkpoints/output INPUT.RESOLUTION 448
+
+python -m torch.distributed.launch --nproc_per_node=1 scripts/train_net.py --config-file "experiments/VidSTG/e2e_STCAT_R101_VidSTG.yaml" --use-seed OUTPUT_DIR data/vidstg/checkpoints/output TENSORBOARD_DIR data/vidstg/checkpoints/output/tensorboard INPUT.RESOLUTION 448
+
+
