@@ -1,0 +1,56 @@
+OUTPUT_DIR: /media/ubuntu/2.0TB/vidstg/checkpoints/stcat_res448/vidstg_res448.pth
+DATA_DIR: /media/ubuntu/2.0TB/vidstg
+TENSORBOARD_DIR: /media/ubuntu/2.0TB/vidstg/checkpoints/stcat_res448/tensorboard
+
+INPUT:
+  RESOLUTION: 448
+  FLIP_PROB_TRAIN: 0.5
+  TEMP_CROP_PROB: 0.5
+  TRAIN_SAMPLE_NUM: 32
+  MAX_VIDEO_LEN: 300
+  IMAGE_MAX_SIZE: 224
+  IMAGE_MIN_SIZE: 224
+  VIDEO_SAMPLE_NUM: 50.0
+
+MODEL:
+  WEIGHT: "/media/ubuntu/2.0TB/stcat_pretrain/pretrained_resnet101_checkpoint.pth"
+  VISION_BACKBONE:
+    NAME: resnet101
+    POS_ENC: sine
+  TEXT_MODEL:
+    NAME: roberta-base
+  STCAT:
+    FROM_SCRATCH: True
+    USE_LEARN_TIME_EMBED: False
+    USE_ACTION: True
+
+DATASET:
+  NAME: VidSTG
+
+DATALOADER:
+  NUM_WORKERS: 8
+  ASPECT_RATIO_GROUPING: False
+
+
+SOLVER:
+  MAX_EPOCH: 10
+  BATCH_SIZE: 10
+  BBOX_COEF: 5
+  GIOU_COEF: 3
+  TEMP_COEF: 10
+  ATTN_COEF: 1
+  ACTIONESS_COEF: 2
+  EOS_COEF: 0.3
+  SIGMA: 2.0
+  BASE_LR: 1e-4
+  TEXT_LR: 5e-5
+  VIS_BACKBONE_LR: 0.0
+  TEMP_LR: 1e-4
+  OPTIMIZER: adamw
+  VAL_PERIOD: 20100
+  CHECKPOINT_PERIOD: 20100
+  SHUFFLE: True
+  SCHEDULE:
+    TYPE: multistep_with_warmup_all
+    DROP_STEP: [8,10]
+  PRE_VAL: False
